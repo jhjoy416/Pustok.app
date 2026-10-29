@@ -1,0 +1,1656 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%231B4D3E'/%3E%3Cpath d='M13 41C20 37 27 38 32 42V25C27 21 20 20 13 23Z' fill='%23FFF8F0'/%3E%3Cpath d='M51 41C44 37 37 38 32 42V25C37 21 44 20 51 23Z' fill='%23E4EEE8'/%3E%3Cpath d='M32 23C25 15 27 8 34 6C39 12 38 18 32 23Z' fill='%23E07A5F'/%3E%3C/svg%3E">
+        <title>পুস্তক — v3</title>
+    <meta name="theme-color" content="#1B4D3E">
+    <meta name="description" content="পুস্তক — আপনার ব্যক্তিগত অফলাইন বইয়ের লাইব্রেরি">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+    <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="পুস্তক">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- Google Fonts: Anek Bangla & Tiro Bangla -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anek+Bangla:wght@300;400;500;600;700;800&family=Tiro+Bangla:ital@0;1&family=Noto+Serif+Bengali:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+
+    <!-- FontAwesome CDN v6.5.1 -->
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
+
+    <!-- Tailwind Theme Customization -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        parchment: '#F3F7F4',
+                        agedPaper: '#E4EEE8',
+                        royalCrimson: '#1B4D3E',
+                        crimsonHover: '#133A2F',
+                        inkBlack: '#1C2724',
+                        vintageGold: '#E07A5F',
+                        warmBorder: '#D3E1D8'
+                    },
+                    fontFamily: {
+                        sans: ['"Anek Bangla"', 'sans-serif'],
+                        serif: ['"Noto Serif Bengali"', '"Tiro Bangla"', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root { color-scheme: light; box-sizing: border-box; padding-top: env(safe-area-inset-top, 0px); padding-bottom: env(safe-area-inset-bottom, 0px); }
+        body {
+            background-color: #F3F7F4;
+            background-image: radial-gradient(#DCE8E0 0.75px, transparent 0.75px);
+            background-size: 22px 22px;
+            color: #1C2724;
+            font-family: 'Anek Bangla', sans-serif;
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #E4EEE8;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #E07A5F;
+            border-radius: 10px;
+        }
+
+        .vintage-card {
+            background: linear-gradient(145deg, #FFFFFF, #F6FAF7);
+            border: 1px solid #D3E1D8;
+            box-shadow: 0 4px 15px -2px rgba(27, 77, 62, 0.08);
+        }
+
+        .book-cover-shadow {
+            box-shadow: 4px 4px 10px rgba(44, 42, 41, 0.15);
+        }
+
+        .parchment-border {
+            border: 2px solid #1B4D3E;
+            outline: 1px solid #E07A5F;
+            outline-offset: 2px;
+        }
+
+        /* ===== v2: Sage & Terracotta redesign ===== */
+        body { background-image: radial-gradient(circle at 12% 0%, #DDEFE4 0, transparent 38%), radial-gradient(circle at 100% 30%, #FBE5DC 0, transparent 30%); background-attachment: fixed; letter-spacing: .005em; }
+        header { background: linear-gradient(120deg, #133A2F, #1B4D3E 60%, #2A6F5B) !important; border-bottom: 3px solid #E07A5F !important; }
+        .vintage-card { background: #fff; border: 1px solid #D3E1D8; border-radius: 22px !important; box-shadow: 0 1px 2px rgba(19,58,47,.06), 0 10px 24px -12px rgba(19,58,47,.18); transition: transform .2s ease, box-shadow .2s ease; }
+        .vintage-card:hover { transform: translateY(-4px); box-shadow: 0 2px 4px rgba(19,58,47,.08), 0 18px 32px -14px rgba(19,58,47,.28); }
+        .book-cover-shadow { box-shadow: 0 8px 16px -6px rgba(19,58,47,.45); border-radius: 8px; }
+        .parchment-border { border: none !important; outline: none !important; border-left: 6px solid #E07A5F !important; background: linear-gradient(100deg, #ffffff, #E8F3EC) !important; border-radius: 18px !important; box-shadow: 0 8px 22px -14px rgba(19,58,47,.35); }
+        button, select, input, textarea { transition: all .15s ease; }
+        button:active { transform: scale(.97); }
+        ::selection { background: #F2B8A2; color: #133A2F; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #E4EEE8; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #E07A5F; }
+
+        /* ===== v3 ===== */
+        .text-xs { font-size: .8125rem !important; line-height: 1.25rem; }
+        .text-\[11px\] { font-size: .75rem !important; }
+        .text-\[10px\] { font-size: .70rem !important; }
+        .clamp2 { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .v3-card { background:#fff; border:1px solid #D3E1D8; border-radius:20px; padding:10px; display:flex; flex-direction:column; gap:10px; box-shadow:0 1px 2px rgba(19,58,47,.06), 0 10px 24px -14px rgba(19,58,47,.2); transition:transform .2s ease, box-shadow .2s ease; }
+        .v3-card:hover { transform: translateY(-4px); box-shadow:0 2px 4px rgba(19,58,47,.08), 0 20px 30px -14px rgba(19,58,47,.3); }
+        .v3-cover { position:relative; aspect-ratio:3/4; border-radius:14px; overflow:hidden; background:#E4EEE8; box-shadow:0 10px 18px -10px rgba(19,58,47,.55); display:flex; align-items:center; justify-content:center; }
+        .v3-cover img { width:100%; height:100%; object-fit:cover; }
+        .v3-badge { display:inline-flex; align-items:center; gap:5px; padding:3px 10px; border-radius:999px; font-size:.75rem; font-weight:700; }
+        .v3-icon-btn { width:34px; height:34px; border-radius:10px; display:inline-flex; align-items:center; justify-content:center; border:1px solid #D3E1D8; color:#44574F; background:#fff; }
+        .v3-icon-btn:hover { background:#E4EEE8; color:#1B4D3E; }
+        .v3-icon-btn.del:hover { background:#FDECEC; color:#B42318; border-color:#F5C2C0; }
+        .hero { background: linear-gradient(120deg,#133A2F,#1B4D3E 55%,#2A6F5B); color:#fff; border-radius:24px; box-shadow:0 18px 40px -22px rgba(19,58,47,.8); }
+        .btn-ghost { background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.28); color:#fff; border-radius:12px; padding:8px 12px; font-weight:600; font-size:.8125rem; display:inline-flex; gap:6px; align-items:center; }
+        .btn-ghost:hover { background:rgba(255,255,255,.22); }
+        .btn-accent { background:#E07A5F; color:#fff; border-radius:12px; padding:8px 14px; font-weight:700; font-size:.8125rem; display:inline-flex; gap:6px; align-items:center; box-shadow:0 8px 18px -8px rgba(224,122,95,.9); }
+        .btn-accent:hover { background:#CF684D; }
+        @media (max-width:380px){ .hero{ padding:16px !important; } }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col pb-12">
+
+    <!-- Top Toast Notification Container -->
+    <div id="toastContainer" class="fixed top-4 right-4 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
+
+    <!-- Main Navigation Header -->
+    <header class="bg-royalCrimson text-amber-50 shadow-md sticky top-0 z-40 border-b-2 border-vintageGold">
+        <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="location.reload()">
+                <svg class="w-11 h-11 shrink-0 drop-shadow-md" viewBox="0 0 64 64" role="img" aria-label="পুস্তক লোগো" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="30" fill="#FFF8F0" stroke="#E07A5F" stroke-width="2.5"/><path d="M13 41C20 37 27 38 32 42V25C27 21 20 20 13 23Z" fill="#1B4D3E"/><path d="M51 41C44 37 37 38 32 42V25C37 21 44 20 51 23Z" fill="#2A6F5B"/><path d="M32 42V25" stroke="#FFF8F0" stroke-width="1.5"/><path d="M18 48Q32 46 46 48" fill="none" stroke="#E07A5F" stroke-width="2.5" stroke-linecap="round"/><path d="M32 23C25 15 27 8 34 6C39 12 38 18 32 23Z" fill="#E07A5F"/><path d="M33 20C33 15 34 11 34 9" fill="none" stroke="#FFF8F0" stroke-width="1.2" stroke-linecap="round"/></svg>
+                <div>
+                    <h1 class="font-serif text-2xl font-bold tracking-wide text-amber-100">পুস্তক</h1>
+                    <p class="text-[10px] text-amber-200/80 tracking-wider">প্রতিটি বই, এক নতুন যাত্রা।</p>
+                </div>
+            </div>
+
+            <!-- Profile Badge -->
+            <div class="flex items-center gap-3">
+                <div id="headerProfileContainer" class="flex items-center gap-2 bg-crimsonHover/60 px-3 py-1.5 rounded-xl border border-vintageGold/40 cursor-pointer hover:bg-crimsonHover transition" onclick="window.openProfileModal()">
+                    <div id="headerProfileAvatar" class="w-8 h-8 rounded-full bg-amber-100 border border-vintageGold flex items-center justify-center text-royalCrimson font-bold text-xs overflow-hidden">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="text-left hidden sm:block">
+                        <p id="headerProfileName" class="text-xs font-bold leading-tight text-amber-50">প্রোফাইল</p>
+                        <p id="headerProfileMeta" class="text-[10px] text-amber-200/80 leading-tight">পিন সেট করুন</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-6xl mx-auto px-4 py-6 flex-1 w-full space-y-6">
+
+        <!-- Hero / Welcome -->
+        <section class="hero p-5 sm:p-7 flex flex-col sm:flex-row items-center justify-between gap-5">
+            <div class="text-center sm:text-left space-y-2 min-w-0">
+                <p class="text-amber-200/90 text-xs font-semibold tracking-wider">আপনার ব্যক্তিগত লাইব্রেরি</p>
+                <h2 id="heroGreeting" class="font-serif text-2xl sm:text-3xl font-bold leading-tight">স্বাগতম, পাঠক</h2>
+                <p id="heroSub" class="text-sm text-white/80">প্রোফাইলে প্রবেশ করে আপনার সংগ্রহ গড়ে তুলুন।</p>
+                <div class="flex flex-wrap items-center justify-center sm:justify-start gap-2 pt-2">
+                    <button onclick="window.openAddModal()" class="btn-accent"><i class="fa-solid fa-plus"></i> নতুন বই</button>
+                    <button onclick="window.exportLibrary()" class="btn-ghost"><i class="fa-solid fa-download"></i> ব্যাকআপ</button>
+                    <label class="btn-ghost cursor-pointer"><i class="fa-solid fa-upload"></i> ইমপোর্ট
+                        <input type="file" accept="application/json,.json" class="hidden" onchange="window.importLibrary(event)">
+                    </label>
+                </div>
+            </div>
+            <div class="flex items-center gap-4 shrink-0">
+                <div class="relative w-24 h-24">
+                    <svg viewBox="0 0 80 80" class="w-24 h-24 -rotate-90"><circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="8"/><circle id="heroRing" cx="40" cy="40" r="34" fill="none" stroke="#E07A5F" stroke-width="8" stroke-linecap="round" stroke-dasharray="213.6" stroke-dashoffset="213.6" style="transition:stroke-dashoffset .8s ease"/></svg>
+                    <div class="absolute inset-0 flex items-center justify-center font-bold text-lg" id="heroPct">০%</div>
+                </div>
+                <div class="text-sm leading-snug">
+                    <p class="text-white/70 text-xs">পড়া শেষ</p>
+                    <p class="font-bold text-lg" id="heroDone">০ / ০</p>
+                    <p class="text-white/70 text-xs mt-1"><i class="fa-solid fa-book-open-reader"></i> চলছে: <span id="heroReading">০</span></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Banner: Bengali Literary Quote -->
+        <section class="parchment-border bg-gradient-to-r from-[#F6FAF7] via-[#E4EEE8] to-[#F6FAF7] p-5 rounded-xl text-center relative overflow-hidden shadow-xs">
+            <div class="text-vintageGold text-xs font-bold uppercase tracking-widest mb-1 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-feather-pointed"></i>
+                <span>প্রতিদিনের সাহিত্যকথা</span>
+                <i class="fa-solid fa-feather-pointed transform rotate-180"></i>
+            </div>
+            <div id="quoteBox" class="transition-opacity duration-500 min-h-[60px] flex flex-col items-center justify-center">
+                <p id="quoteText" class="font-serif text-lg md:text-xl font-semibold text-royalCrimson italic">"বই কিনে কেউ কোনো দিন দেউলিয়া হয় না।"</p>
+                <p id="quoteAuthor" class="text-xs text-stone-600 font-bold mt-1">— সৈয়দ মুজতবা আলী</p>
+            </div>
+            <button onclick="window.rotateQuote()" class="absolute right-3 bottom-3 text-xs text-royalCrimson hover:text-crimsonHover font-semibold bg-white/80 px-2.5 py-1 rounded-lg border border-warmBorder shadow-2xs flex items-center gap-1 transition">
+                <i class="fa-solid fa-rotate"></i> নতুন উক্তি
+            </button>
+        </section>
+
+        <!-- Profile & Sign-in Modal -->
+        <div id="profileModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+            <div class="bg-white rounded-2xl border-2 border-royalCrimson shadow-2xl max-w-md w-full p-6 space-y-4">
+                <div class="text-center space-y-1">
+                    <svg class="w-16 h-16 mx-auto mb-2 drop-shadow-md" viewBox="0 0 64 64" role="img" aria-label="পুস্তক লোগো" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="30" fill="#FFF8F0" stroke="#E07A5F" stroke-width="2.5"/><path d="M13 41C20 37 27 38 32 42V25C27 21 20 20 13 23Z" fill="#1B4D3E"/><path d="M51 41C44 37 37 38 32 42V25C37 21 44 20 51 23Z" fill="#2A6F5B"/><path d="M32 42V25" stroke="#FFF8F0" stroke-width="1.5"/><path d="M18 48Q32 46 46 48" fill="none" stroke="#E07A5F" stroke-width="2.5" stroke-linecap="round"/><path d="M32 23C25 15 27 8 34 6C39 12 38 18 32 23Z" fill="#E07A5F"/><path d="M33 20C33 15 34 11 34 9" fill="none" stroke="#FFF8F0" stroke-width="1.2" stroke-linecap="round"/></svg>
+                    <h3 class="text-xl font-serif font-bold text-royalCrimson">ব্যক্তিগত প্রোফাইল ও সিকিউরিটি</h3>
+                    <p class="text-xs text-stone-600">আপনার নিজস্ব লাইব্রেরিতে প্রবেশ করতে নাম ও পিন ব্যবহার করুন</p>
+                </div>
+
+                <form id="profileForm" onsubmit="window.saveUserProfile(event)" class="space-y-3 text-sm">
+                    <!-- Avatar Upload Section -->
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="w-20 h-20 rounded-full border-2 border-vintageGold bg-parchment overflow-hidden flex items-center justify-center relative shadow-xs">
+                            <img id="profileAvatarPreview" src="" class="w-full h-full object-cover hidden">
+                            <i id="profileAvatarPlaceholder" class="fa-solid fa-user-gear text-3xl text-royalCrimson/40"></i>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input type="url" id="inputProfileAvatarUrl" placeholder="প্রোফাইল ছবির লিঙ্ক..." class="p-1.5 border border-warmBorder bg-parchment rounded-lg text-xs w-48 focus:outline-none">
+                            <label class="cursor-pointer bg-agedPaper hover:bg-amber-200 text-stone-800 px-2 py-1.5 rounded-lg border border-warmBorder text-xs font-semibold">
+                                <i class="fa-solid fa-camera text-royalCrimson"></i>
+                                <input type="file" id="inputProfileAvatarFile" accept="image/*" onchange="window.handleProfileAvatarUpload(event)" class="hidden">
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1">আপনার নাম <span class="text-royalCrimson">*</span></label>
+                        <input type="text" id="inputProfileName" required placeholder="যেমন: জাহিদ হাসান" class="w-full p-2.5 rounded-xl border border-warmBorder bg-parchment focus:outline-none focus:ring-2 focus:ring-royalCrimson/40">
+                    </div>
+
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1">সিকিউরিটি পিন (৬ ডিজিট) <span class="text-royalCrimson">*</span></label>
+                        <input type="password" id="inputProfilePin" required maxlength="6" pattern="[0-9]{6}" inputmode="numeric" placeholder="****** (যেমন: ১২৩৪৫৬)" class="w-full p-2.5 rounded-xl border border-warmBorder bg-parchment font-mono tracking-widest text-center text-lg focus:outline-none focus:ring-2 focus:ring-royalCrimson/40">
+                        <p class="text-[11px] text-stone-500 mt-1 text-center bg-amber-100/50 p-1.5 rounded-lg border border-amber-200">
+                            🔒 <strong>গোপনীয়তা নিশ্চিতকরণ:</strong> এই পিনটি দিয়ে আপনার ডাটাবেজ সুরক্ষিত রাখা হয়।
+                        </p>
+                    </div>
+
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1">শিক্ষাগত যোগ্যতা / পেশা <span class="text-royalCrimson">*</span></label>
+                        <select id="inputProfileEdu" required class="w-full p-2.5 rounded-xl border border-warmBorder bg-parchment focus:outline-none focus:ring-2 focus:ring-royalCrimson/40 text-xs">
+                            <option value="স্কুল শিক্ষার্থী">🏫 স্কুল শিক্ষার্থী</option>
+                            <option value="কলেজ শিক্ষার্থী">🎓 কলেজ শিক্ষার্থী</option>
+                            <option value="বিশ্ববিদ্যালয় শিক্ষার্থী">🏛️ বিশ্ববিদ্যালয় শিক্ষার্থী</option>
+                            <option value="চাকরিজীবী / পেশাজীবী">💼 চাকরিজীবী / পেশাজীবী</option>
+                            <option value="অন্যান্য">📚 সাহিত্যপ্রেমী</option>
+                        </select>
+                    </div>
+
+                    <div class="pt-2">
+                        <button type="submit" class="w-full bg-royalCrimson hover:bg-crimsonHover text-amber-50 py-3 rounded-xl font-bold shadow-md transition-all flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-key"></i>
+                            <span>লাইব্রেরিতে প্রবেশ করুন</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Stats Counter Cards -->
+        <section class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+            <div class="vintage-card p-3 rounded-xl text-center">
+                <div class="flex items-center justify-center gap-1.5 mb-1 text-royalCrimson">
+                    <i class="fa-solid fa-boxes-stacked text-lg"></i>
+                </div>
+                <span class="block text-xs font-bold text-stone-600 flex items-center justify-center gap-1">
+                    <i class="fa-solid fa-book-atlas text-[11px] text-royalCrimson"></i> মোট সংগ্রহ
+                </span>
+                <span id="statTotal" class="text-xl font-extrabold text-royalCrimson">০</span>
+            </div>
+
+            <div class="vintage-card p-3 rounded-xl text-center">
+                <div class="flex items-center justify-center gap-1.5 mb-1 text-emerald-700">
+                    <i class="fa-solid fa-circle-check text-lg"></i>
+                </div>
+                <span class="block text-xs font-bold text-stone-600 flex items-center justify-center gap-1">
+                    <i class="fa-solid fa-check-double text-[11px] text-emerald-700"></i> পড়া শেষ
+                </span>
+                <span id="statCompleted" class="text-xl font-extrabold text-emerald-800">০</span>
+            </div>
+
+            <div class="vintage-card p-3 rounded-xl text-center">
+                <div class="flex items-center justify-center gap-1.5 mb-1 text-amber-700">
+                    <i class="fa-solid fa-book-open-reader text-lg"></i>
+                </div>
+                <span class="block text-xs font-bold text-stone-600 flex items-center justify-center gap-1">
+                    <i class="fa-solid fa-glasses text-[11px] text-amber-700"></i> পড়া চলছে
+                </span>
+                <span id="statReading" class="text-xl font-extrabold text-amber-800">০</span>
+            </div>
+
+            <div class="vintage-card p-3 rounded-xl text-center">
+                <div class="flex items-center justify-center gap-1.5 mb-1 text-rose-700">
+                    <i class="fa-solid fa-hourglass-start text-lg"></i>
+                </div>
+                <span class="block text-xs font-bold text-stone-600 flex items-center justify-center gap-1">
+                    <i class="fa-solid fa-clock text-[11px] text-rose-700"></i> পড়া হয়নি
+                </span>
+                <span id="statUnread" class="text-xl font-extrabold text-rose-800">০</span>
+            </div>
+
+            <div class="vintage-card p-3 rounded-xl text-center">
+                <div class="flex items-center justify-center gap-1.5 mb-1 text-indigo-700">
+                    <i class="fa-solid fa-bookmark text-lg"></i>
+                </div>
+                <span class="block text-xs font-bold text-stone-600 flex items-center justify-center gap-1">
+                    <i class="fa-solid fa-heart text-[11px] text-indigo-700"></i> উইশলিস্ট
+                </span>
+                <span id="statWishlist" class="text-xl font-extrabold text-indigo-800">০</span>
+            </div>
+
+            <div class="vintage-card p-3 rounded-xl text-center">
+                <div class="flex items-center justify-center gap-1.5 mb-1 text-vintageGold">
+                    <i class="fa-solid fa-coins text-lg"></i>
+                </div>
+                <span class="block text-xs font-bold text-stone-600 flex items-center justify-center gap-1">
+                    <i class="fa-solid fa-wallet text-[11px] text-vintageGold"></i> মোট খরচ
+                </span>
+                <span id="statCost" class="text-lg font-extrabold text-stone-800">৳০</span>
+            </div>
+        </section>
+
+        <!-- Reading Time Stats & Log Bar -->
+        <section class="parchment-border bg-gradient-to-r from-[#F6FAF7] via-[#E4EEE8] to-[#F6FAF7] p-4 rounded-xl flex flex-col sm:flex-row items-center justify-between gap-4 shadow-xs">
+            <div class="flex items-center gap-4 w-full sm:w-auto">
+                <div class="w-12 h-12 rounded-full bg-royalCrimson/10 text-royalCrimson border border-vintageGold flex items-center justify-center text-xl shrink-0">
+                    <i class="fa-solid fa-stopwatch"></i>
+                </div>
+                <div>
+                    <h3 class="font-serif font-bold text-base text-royalCrimson">পড়ার সময় ও দৈনিক অভ্যাস (Reading Tracker)</h3>
+                    <div class="flex items-center gap-4 text-xs text-stone-700 mt-0.5">
+                        <span>📅 আজকের পড়া: <strong id="statTodayTime" class="text-royalCrimson font-bold">০ মি.</strong></span>
+                        <span>🗓️ এই মাসের পড়া: <strong id="statMonthTime" class="text-royalCrimson font-bold">০ ঘণ্টা</strong></span>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center gap-2 w-full sm:w-auto">
+                <button onclick="window.resetReadingLogs()" title="পড়ার সময় রিসেট / ক্লিয়ার করুন" class="px-3 py-2 bg-amber-100 hover:bg-red-100 text-stone-700 hover:text-red-700 border border-warmBorder rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 shadow-2xs transition">
+                    <i class="fa-solid fa-rotate-right text-royalCrimson"></i>
+                    <span>রিসেট</span>
+                </button>
+                <button onclick="window.openTimerModal()" class="flex-1 sm:flex-none px-4 py-2 bg-royalCrimson hover:bg-crimsonHover text-amber-50 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition shrink-0">
+                    <i class="fa-solid fa-clock font-bold"></i> সময় রেকর্ড / টাইমার
+                </button>
+            </div>
+        </section>
+
+        <!-- Controls Bar: Search & Status Filters -->
+        <section class="flex flex-col md:flex-row items-center justify-between gap-4 bg-white/80 p-4 rounded-2xl border border-warmBorder shadow-2xs">
+            <div class="w-full md:w-72 relative">
+                <input type="text" id="searchInput" oninput="window.renderApp()" placeholder="বই, লেখক বা সমগ্রের নাম দিয়ে খুঁজুন..." class="w-full pl-9 pr-4 py-2 bg-parchment rounded-xl border border-warmBorder text-xs focus:outline-none focus:ring-2 focus:ring-royalCrimson/40">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-stone-400 text-xs"></i>
+            </div>
+
+            <!-- Status Filter Tabs -->
+            <div class="flex flex-wrap gap-1.5 w-full md:w-auto justify-center">
+                <button onclick="window.setFilter('all')" id="filter-all" class="px-3 py-1.5 text-xs font-bold rounded-xl transition bg-royalCrimson text-amber-50">সব বই</button>
+                <button onclick="window.setFilter('reading')" id="filter-reading" class="px-3 py-1.5 text-xs font-semibold rounded-xl text-stone-700 hover:bg-agedPaper transition">📖 পড়ছি</button>
+                <button onclick="window.setFilter('unread')" id="filter-unread" class="px-3 py-1.5 text-xs font-semibold rounded-xl text-stone-700 hover:bg-agedPaper transition">⏳ পড়া হয়নি</button>
+                <button onclick="window.setFilter('completed')" id="filter-completed" class="px-3 py-1.5 text-xs font-semibold rounded-xl text-stone-700 hover:bg-agedPaper transition">✅ পড়া শেষ</button>
+                <button onclick="window.setFilter('wishlist')" id="filter-wishlist" class="px-3 py-1.5 text-xs font-semibold rounded-xl text-stone-700 hover:bg-agedPaper transition"><i class="fa-solid fa-bookmark"></i> উইশলিস্ট</button>
+            </div>
+
+            <button id="addNewBookBtn" onclick="window.openAddModal()" class="w-full md:w-auto px-4 py-2 bg-royalCrimson hover:bg-crimsonHover text-amber-50 rounded-xl font-bold text-xs flex items-center justify-center gap-2 shadow-sm transition">
+                <i class="fa-solid fa-plus"></i> নতুন বই যুক্ত করুন
+            </button>
+        </section>
+
+        <!-- Books Collection Display Grid -->
+        <section id="booksGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+            <!-- Dynamic rendering of books -->
+        </section>
+    </main>
+
+    <footer class="max-w-6xl mx-auto px-4 pb-6 w-full">
+        <div class="flex flex-col items-center gap-1.5 pt-6 border-t border-warmBorder text-center">
+            <svg class="w-9 h-9" viewBox="0 0 64 64" role="img" aria-label="পুস্তক লোগো" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="30" fill="#FFF8F0" stroke="#E07A5F" stroke-width="2.5"/><path d="M13 41C20 37 27 38 32 42V25C27 21 20 20 13 23Z" fill="#1B4D3E"/><path d="M51 41C44 37 37 38 32 42V25C37 21 44 20 51 23Z" fill="#2A6F5B"/><path d="M32 42V25" stroke="#FFF8F0" stroke-width="1.5"/><path d="M18 48Q32 46 46 48" fill="none" stroke="#E07A5F" stroke-width="2.5" stroke-linecap="round"/><path d="M32 23C25 15 27 8 34 6C39 12 38 18 32 23Z" fill="#E07A5F"/><path d="M33 20C33 15 34 11 34 9" fill="none" stroke="#FFF8F0" stroke-width="1.2" stroke-linecap="round"/></svg>
+            <p class="font-serif font-bold text-royalCrimson leading-none">পুস্তক</p>
+            <p class="text-[11px] text-stone-500">প্রতিটি বই, এক নতুন যাত্রা।</p>
+        </div>
+    </footer>
+
+    <!-- Wishlist Quick-Buy Modal -->
+    <div id="quickBuyModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+        <div class="bg-white border border-warmBorder rounded-2xl max-w-md w-full p-6 shadow-2xl">
+            <div class="flex items-center justify-between mb-4 border-b border-warmBorder pb-3">
+                <h3 class="text-lg font-serif font-bold text-royalCrimson flex items-center gap-2">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    <span>বইটি সংগ্রহ করুন</span>
+                </h3>
+                <button onclick="window.closeQuickBuyModal()" class="text-stone-400 hover:text-stone-700 text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="quickBuyForm" onsubmit="window.saveQuickBuy(event)" class="space-y-3 text-xs">
+                <input type="hidden" id="quickBuyBookId">
+
+                <div class="p-3 bg-parchment rounded-xl border border-warmBorder">
+                    <p id="quickBuyBookTitle" class="font-serif font-bold text-sm text-royalCrimson truncate"></p>
+                    <p id="quickBuyBookAuthor" class="text-xs text-stone-600 truncate"></p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1">ক্রয়মূল্য (৳ টাকা) <span class="text-royalCrimson">*</span></label>
+                        <input type="number" id="quickBuyPrice" required min="0" placeholder="যেমন: ৩৫০" class="w-full p-2.5 rounded-xl border border-warmBorder bg-parchment focus:outline-none focus:ring-2 focus:ring-royalCrimson/40">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1">কেনার মাধ্যম</label>
+                        <select id="quickBuyMedium" class="w-full p-2.5 rounded-xl border border-warmBorder bg-parchment focus:outline-none">
+                            <option value="offline">দোকান / বুকশপ</option>
+                            <option value="online">অনলাইন অর্ডার</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1">বইয়ের কন্ডিশন</label>
+                        <select id="quickBuyCondition" class="w-full p-2.5 rounded-xl border border-warmBorder bg-parchment focus:outline-none">
+                            <option value="new">নতুন</option>
+                            <option value="used">পুরানো</option>
+                            <option value="gift">উপহার</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1">বর্তমান স্ট্যাটাস</label>
+                        <select id="quickBuyStatus" class="w-full p-2.5 rounded-xl border border-warmBorder bg-parchment focus:outline-none">
+                            <option value="unread">⏳ পড়া হয়নি (সংগ্রহে জমা)</option>
+                            <option value="reading">📖 পড়ছি</option>
+                            <option value="completed">✅ পড়া শেষ</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="pt-3 flex gap-2">
+                    <button type="button" onclick="window.closeQuickBuyModal()" class="w-1/2 bg-agedPaper border border-warmBorder text-stone-700 py-2.5 rounded-xl font-semibold">বাতিল</button>
+                    <button type="submit" class="w-1/2 bg-emerald-700 hover:bg-emerald-800 text-white py-2.5 rounded-xl font-semibold shadow-md flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-check"></i>
+                        <span>লাইব্রেরিতে যোগ করুন</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add/Edit Book Modal -->
+    <div id="bookModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+        <div class="bg-white border border-warmBorder rounded-2xl max-w-lg w-full p-6 shadow-2xl max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <div class="flex items-center justify-between mb-4 border-b border-warmBorder pb-3">
+                <h3 id="bookModalTitle" class="text-lg font-serif font-bold text-royalCrimson">নতুন বই যোগ করুন</h3>
+                <button onclick="window.closeBookModal()" class="text-stone-400 hover:text-stone-700 text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="bookForm" onsubmit="window.saveBook(event)" class="space-y-3 text-xs">
+                <input type="hidden" id="inputBookId">
+
+                <div>
+                    <label class="block font-semibold text-stone-700 mb-1">বইয়ের নাম <span class="text-royalCrimson">*</span></label>
+                    <input type="text" id="inputTitle" required placeholder="যেমন: চাঁদের পাহাড়" class="w-full p-2.5 rounded-xl border border-warmBorder bg-parchment focus:outline-none focus:ring-2 focus:ring-royalCrimson/40">
+                </div>
+
+                <div>
+                    <label class="block font-semibold text-stone-700 mb-1">লেখকের নাম <span class="text-royalCrimson">*</span></label>
+                    <input type="text" id="inputAuthor" required placeholder="যেমন: বিভূতিভূষণ বন্দ্যোপাধ্যায়" class="w-full p-2.5 rounded-xl border border-warmBorder bg-parchment focus:outline-none focus:ring-2 focus:ring-royalCrimson/40">
+                </div>
+
+                <!-- Cover Image Selection -->
+                <div>
+                    <label class="block font-semibold text-stone-700 mb-1">বইয়ের প্রচ্ছদ / ছবি</label>
+                    <div class="flex items-center gap-2">
+                        <input type="url" id="inputCoverUrl" placeholder="ছবি লিঙ্ক (URL)..." class="flex-1 p-2 rounded-xl border border-warmBorder bg-parchment focus:outline-none">
+                        <label class="cursor-pointer bg-agedPaper border border-warmBorder hover:bg-amber-200 px-3 py-2 rounded-xl text-stone-700 font-medium shrink-0 flex items-center gap-1">
+                            <i class="fa-solid fa-upload text-royalCrimson"></i>
+                            <span>আপলোড</span>
+                            <input type="file" id="inputCoverFile" accept="image/*" onchange="window.handleImageUpload(event)" class="hidden">
+                        </label>
+                    </div>
+                    <div id="coverPreviewContainer" class="mt-2 hidden flex items-center gap-2">
+                        <img id="coverPreview" src="" class="w-12 h-16 object-cover rounded border border-warmBorder">
+                        <button type="button" onclick="window.clearCoverImage()" class="text-xs text-red-600 hover:underline">ছবি সরান</button>
+                        <span id="autoCoverHint" class="hidden text-[11px] text-stone-500">✨ নাম থেকে স্বয়ংক্রিয় প্রচ্ছদ — নিজের ছবি আপলোড করলে সেটি ব্যবহার হবে</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1">অবস্থা / স্ট্যাটাস</label>
+                        <select id="inputStatus" onchange="window.updateDateFields()" class="w-full p-2.5 rounded-xl border border-warmBorder bg-parchment focus:outline-none">
+                            <option value="reading">📖 পড়ছি</option>
+                            <option value="completed">✅ পড়া শেষ</option>
+                            <option value="unread">⏳ পড়া হয়নি</option>
+                            <option value="wishlist"><i class="fa-solid fa-bookmark"></i> উইশলিস্ট</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1">আপনার রেটিং</label>
+                        <select id="inputRating" class="w-full p-2.5 rounded-xl border border-warmBorder bg-parchment focus:outline-none font-semibold text-amber-600">
+                            <option value="0">⭐ রেটিং দিন (ঐচ্ছিক)</option>
+                            <option value="5">⭐⭐⭐⭐⭐ (৫/৫ - চমৎকার)</option>
+                            <option value="4">⭐⭐⭐⭐ (৪/৫ - খুব ভালো)</option>
+                            <option value="3">⭐⭐⭐ (৩/৫ - ভালো)</option>
+                            <option value="2">⭐⭐ (২/৫ - মাঝারি)</option>
+                            <option value="1">⭐ (১/৫ - সাধারণ)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1">বিষয় / জেনার</label>
+                        <select id="inputGenre" class="w-full p-2.5 rounded-xl border border-warmBorder bg-parchment focus:outline-none focus:ring-2 focus:ring-royalCrimson/40">
+                            <option value="">-- বিষয় নির্বাচন করুন --</option>
+                            <option value="উপন্যাস">📖 উপন্যাস</option>
+                            <option value="ছোটগল্প">📝 ছোটগল্প / গল্পসংকলন</option>
+                            <option value="থ্রিলার & রহস্য">🕵️‍♂️ থ্রিলার ও রহস্য</option>
+                            <option value="সায়েন্স ফিকশন">🚀 সায়েন্স ফিকশন</option>
+                            <option value="কাব্যগ্রন্থ & কবিতা">✍️ কাব্যগ্রন্থ / কবিতা</option>
+                            <option value="ইতিহাস & রাজনীতি">🏛️ ইতিহাস ও রাজনীতি</option>
+                            <option value="জীবনী & স্মৃতিকথা">📜 জীবনী ও স্মৃতিকথা</option>
+                            <option value="অনুবাদ সাহিত্য">🌐 অনুবাদ সাহিত্য</option>
+                            <option value="আত্মউন্নয়ন">💡 আত্মউন্নয়ন / মোটিভেশনাল</option>
+                            <option value="ধর্মীয় & আধ্যাত্মিক">🕌 ধর্মীয় ও আধ্যাত্মিক</option>
+                            <option value="অন্যান্য">📚 অন্যান্য</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1">বইয়ের কন্ডিশন</label>
+                        <select id="inputCondition" class="w-full p-2.5 rounded-xl border border-warmBorder bg-parchment focus:outline-none">
+                            <option value="new">নতুন</option>
+                            <option value="used">পুরানো</option>
+                            <option value="gift">উপহার</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1">ক্রয়মূল্য (৳ টাকা)</label>
+                        <input type="number" id="inputPrice" min="0" placeholder="যেমন: ৩৫০" class="w-full p-2.5 rounded-xl border border-warmBorder bg-parchment focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1">কেনার মাধ্যম</label>
+                        <select id="inputMedium" class="w-full p-2.5 rounded-xl border border-warmBorder bg-parchment focus:outline-none">
+                            <option value="offline">দোকান / বুকশপ</option>
+                            <option value="online">অনলাইন অর্ডার</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1">পড়া শুরুর তারিখ</label>
+                        <input type="date" id="inputStartDate" class="w-full p-2.5 rounded-xl border border-warmBorder bg-parchment focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1">পড়া শেষ করার তারিখ</label>
+                        <input type="date" id="inputEndDate" class="w-full p-2.5 rounded-xl border border-warmBorder bg-parchment focus:outline-none">
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2 pt-1">
+                    <input type="checkbox" id="inputIsOmnibus" onchange="window.toggleOmnibusListInput()" class="w-4 h-4 text-royalCrimson rounded focus:ring-royalCrimson accent-royalCrimson">
+                    <label for="inputIsOmnibus" class="font-semibold text-stone-700">এটি একটি সমগ্র / রচনা সংকলন বই</label>
+                </div>
+
+                <!-- Omnibus Sub-titles Container -->
+                <div id="omnibusTitlesContainer" class="hidden p-3 bg-amber-50/80 rounded-xl border border-amber-300/70 space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="font-semibold text-stone-700 text-xs">সংকলনের ভেতরের বইসমূহ:</span>
+                        <button type="button" onclick="window.addOmnibusRow()" class="text-xs text-royalCrimson hover:underline font-bold">+ বই যোগ করুন</button>
+                    </div>
+                    <div id="omnibusItemsList" class="space-y-2">
+                        <!-- Dynamic sub-book rows -->
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-semibold text-stone-700 mb-1">রিভিউ / মন্তব্য</label>
+                    <textarea id="inputReview" rows="3" placeholder="বইটি কেমন লাগলো সে সম্পর্কে লিখুন..." class="w-full p-2.5 rounded-xl border border-warmBorder bg-parchment focus:outline-none"></textarea>
+                </div>
+
+                <div class="pt-3 flex gap-2">
+                    <button type="button" onclick="window.closeBookModal()" class="w-1/2 bg-agedPaper border border-warmBorder text-stone-700 py-2.5 rounded-xl font-semibold">বাতিল</button>
+                    <button type="submit" class="w-1/2 bg-royalCrimson hover:bg-crimsonHover text-amber-50 py-2.5 rounded-xl font-semibold shadow-md">সংরক্ষণ করুন</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Log Reading Time / Stopwatch Modal -->
+    <div id="timerModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs flex items-center justify-center p-4 hidden">
+        <div class="bg-white border border-warmBorder rounded-2xl max-w-md w-full p-6 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between border-b border-warmBorder pb-3">
+                <h3 class="text-lg font-serif font-bold text-royalCrimson flex items-center gap-2">
+                    <i class="fa-solid fa-hourglass-half"></i>
+                    <span>পড়ার সময় রেকর্ড করুন</span>
+                </h3>
+                <button onclick="window.closeTimerModal()" class="text-stone-400 hover:text-stone-700 text-lg">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- Timer / Stopwatch Control -->
+            <div class="bg-parchment p-4 rounded-xl border border-warmBorder text-center space-y-2">
+                <p class="text-xs font-semibold text-stone-600">লাইভ পড়ার স্টপওয়াচ</p>
+                <div id="stopwatchDisplay" class="text-3xl font-extrabold font-mono text-royalCrimson">00:00:00</div>
+                <div class="flex justify-center gap-2 pt-1">
+                    <button id="timerStartBtn" onclick="window.toggleTimer()" class="px-4 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg text-xs font-bold transition flex items-center gap-1">
+                        <i class="fa-solid fa-play"></i> শুরু করুন
+                    </button>
+                    <button onclick="window.resetTimer()" class="px-3 py-1.5 bg-stone-200 hover:bg-stone-300 text-stone-700 rounded-lg text-xs font-semibold transition">
+                        রিসেট
+                    </button>
+                </div>
+            </div>
+
+            <div class="relative flex py-1 items-center">
+                <div class="flex-grow border-t border-warmBorder"></div>
+                <span class="flex-shrink mx-2 text-stone-400 text-xs">অথবা সরাসরি যোগ করুন</span>
+                <div class="flex-grow border-t border-warmBorder"></div>
+            </div>
+
+            <form id="timeLogForm" onsubmit="window.saveReadingTimeLog(event)" class="space-y-3 text-xs">
+                <div>
+                    <label class="block font-semibold text-stone-700 mb-1">কোন বইটি পড়ছিলেন? <span class="text-royalCrimson">*</span></label>
+                    <select id="logBookId" required class="w-full p-2.5 rounded-xl border border-warmBorder bg-parchment focus:outline-none">
+                        <!-- Populated dynamically -->
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1">পড়ার সময় (মিনিট) <span class="text-royalCrimson">*</span></label>
+                        <input type="number" id="logMinutes" min="1" required placeholder="যেমন: ৪৫" class="w-full p-2.5 rounded-xl border border-warmBorder bg-parchment focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-stone-700 mb-1">তারিখ</label>
+                        <input type="date" id="logDate" required class="w-full p-2.5 rounded-xl border border-warmBorder bg-parchment focus:outline-none">
+                    </div>
+                </div>
+
+                <div class="pt-2 flex gap-2">
+                    <button type="button" onclick="window.closeTimerModal()" class="w-1/2 bg-agedPaper border border-warmBorder text-stone-700 py-2.5 rounded-xl font-semibold">বাতিল</button>
+                    <button type="submit" class="w-1/2 bg-royalCrimson hover:bg-crimsonHover text-amber-50 py-2.5 rounded-xl font-semibold shadow-md flex items-center justify-center gap-1">
+                        <i class="fa-solid fa-floppy-disk"></i> সেভ করুন
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Confirm Modal -->
+    <div id="confirmModal" class="fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 text-center space-y-4">
+            <div class="w-12 h-12 mx-auto rounded-full bg-red-50 text-red-600 flex items-center justify-center text-xl"><i class="fa-solid fa-triangle-exclamation"></i></div>
+            <p id="confirmMsg" class="text-stone-700 font-semibold"></p>
+            <div class="flex gap-2">
+                <button id="confirmNo" class="flex-1 py-2.5 rounded-xl border border-warmBorder text-stone-700 font-semibold hover:bg-agedPaper">বাতিল</button>
+                <button id="confirmYes" class="flex-1 py-2.5 rounded-xl bg-red-600 hover:bg-red-700 text-white font-bold">হ্যাঁ, নিশ্চিত</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Engine Logic Script -->
+    <script type="module">
+        let currentUser = null;
+
+        function lsGet(key) { try { return JSON.parse(localStorage.getItem(key)); } catch (e) { return null; } }
+        function lsSet(key, val) { try { localStorage.setItem(key, JSON.stringify(val)); return true; } catch (e) { console.warn('Storage failed', e); return false; } }
+        let currentUserProfile = lsGet('boipoka_user_profile') || null;
+        let myBooks = [];
+
+        function getUserKey(name, pin) {
+            const raw = btoa(unescape(encodeURIComponent(name.trim().toLowerCase() + '_' + pin.trim())));
+            return 'user_' + raw.replace(/\//g, '_').replace(/\+/g, '-').replace(/=/g, '');
+        }
+
+        function loadLocalUserBooks(userKey) {
+            if (!userKey) return [];
+            return lsGet('boipoka_books_' + userKey) || [];
+        }
+
+        function saveLocalUserBooks(userKey, books) {
+            if (!userKey) return false;
+            return lsSet('boipoka_books_' + userKey, books);
+        }
+
+        // Helper functions for reading time logs
+        function loadLocalReadingLogs(userKey) {
+            if (!userKey) return [];
+            return lsGet('boipoka_logs_' + userKey) || [];
+        }
+
+        function saveLocalReadingLogs(userKey, logs) {
+            if (!userKey) return false;
+            return lsSet('boipoka_logs_' + userKey, logs);
+        }
+
+        // Global UI state
+        let currentFilter = 'all';
+        let quoteIndex = 0;
+        let quoteInterval = null;
+        let currentCoverData = '';
+        let currentProfileAvatarData = '';
+        let omnibusItems = [];
+
+        // Reading Timer State Variables
+        let timerInterval = null;
+        let timerSeconds = 0;
+        let isTimerRunning = false;
+
+        window.escapeHtml = function(text) {
+            if (!text) return '';
+            return text.toString()
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        };
+
+        window.calculateDays = function(start, end) {
+            if (!start) return null;
+            const startDate = new Date(start);
+            const endDate = end ? new Date(end) : new Date();
+            const diffTime = endDate - startDate;
+            if (diffTime < 0) return 1;
+            return Math.ceil(diffTime / (1000 * 60 * 60 * 24)) || 1;
+        };
+
+        window.showToast = function(msg, isError = false) {
+            const toastContainer = document.getElementById('toastContainer');
+            if (!toastContainer) return;
+            const toast = document.createElement('div');
+            toast.className = `${isError ? 'bg-red-800' : 'bg-royalCrimson'} text-amber-50 text-xs font-semibold px-4 py-2.5 rounded-xl shadow-lg border border-vintageGold flex items-center gap-2 transition-all duration-300`;
+            toast.innerHTML = `<i class="fa-solid ${isError ? 'fa-circle-exclamation' : 'fa-circle-check'} text-vintageGold"></i> ${msg}`;
+            toastContainer.appendChild(toast);
+            setTimeout(() => toast.remove(), 4000);
+        };
+
+        // Cloud sync is unavailable on a published page; data is stored in this browser only.
+        function initAuthAndCloudSync() {}
+        function setupRealtimeCloudSync() {}
+        async function syncBookToCloud() {}
+        async function removeBookFromCloud() {}
+
+
+        // ---- v1.1 fixes: image compression, date rules, migration ----
+        function compressImage(src, maxW, maxH, quality) {
+            return new Promise(resolve => {
+                const img = new Image();
+                img.onload = () => {
+                    try {
+                        const scale = Math.min(1, maxW / img.width, maxH / img.height);
+                        const w = Math.max(1, Math.round(img.width * scale)), h = Math.max(1, Math.round(img.height * scale));
+                        const c = document.createElement('canvas'); c.width = w; c.height = h;
+                        const ctx = c.getContext('2d');
+                        ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, w, h);
+                        ctx.drawImage(img, 0, 0, w, h);
+                        resolve(c.toDataURL('image/jpeg', quality));
+                    } catch (e) { resolve(src); }
+                };
+                img.onerror = () => resolve(src);
+                img.src = src;
+            });
+        }
+
+        function normalizeDates(b) {
+            if (b.status === 'unread' || b.status === 'wishlist') { b.startDate = ''; b.endDate = ''; }
+            else if (b.status === 'reading') { b.endDate = ''; }
+            return b;
+        }
+
+        window.updateDateFields = function() {
+            const st = document.getElementById('inputStatus').value;
+            const sd = document.getElementById('inputStartDate'), ed = document.getElementById('inputEndDate');
+            const showStart = (st === 'reading' || st === 'completed'), showEnd = (st === 'completed');
+            sd.parentElement.classList.toggle('hidden', !showStart);
+            ed.parentElement.classList.toggle('hidden', !showEnd);
+            if (!showStart) sd.value = '';
+            if (!showEnd) ed.value = '';
+            ed.min = sd.value || '';
+        };
+
+        async function migrateStoredBooks() {
+            let changed = false;
+            for (const b of myBooks) {
+                const before = b.startDate + '|' + b.endDate;
+                normalizeDates(b);
+                if (before !== b.startDate + '|' + b.endDate) changed = true;
+                if (typeof b.cover === 'string' && b.cover.startsWith('data:image') && b.cover.length > 120000) {
+                    b.cover = await compressImage(b.cover, 480, 640, 0.8); changed = true;
+                }
+            }
+            if (changed && currentUserProfile && currentUserProfile.userKey) {
+                saveLocalUserBooks(currentUserProfile.userKey, myBooks);
+                window.renderApp();
+            }
+        }
+
+        function initApp() {
+            window.startQuoteAutoRotate();
+            initAuthAndCloudSync();
+
+            if (currentUserProfile && currentUserProfile.name && currentUserProfile.pin && currentUserProfile.userKey) {
+                myBooks = loadLocalUserBooks(currentUserProfile.userKey);
+                window.updateHeaderProfileBadge(currentUserProfile);
+                window.renderApp();
+                try { if (navigator.storage && navigator.storage.persist) navigator.storage.persist(); } catch (e) {}
+                migrateStoredBooks();
+            } else {
+                window.openProfileModal(true);
+            }
+        }
+
+        window.saveUserProfile = function(e) {
+            e.preventDefault();
+            const nameVal = document.getElementById('inputProfileName').value.trim();
+            const pinVal = document.getElementById('inputProfilePin').value.trim();
+            const eduVal = document.getElementById('inputProfileEdu').value;
+
+            if (!nameVal) {
+                alert("অনুগ্রহ করে আপনার নাম দিন!");
+                return;
+            }
+            if (!/^\d{6}$/.test(pinVal)) {
+                alert("অনুগ্রহ করে ৬-ডিজিটের সংখ্যাসূচক পাসওয়ার্ড/পিন দিন!");
+                return;
+            }
+
+            const userKey = getUserKey(nameVal, pinVal);
+            const avatarUrl = document.getElementById('inputProfileAvatarUrl').value.trim();
+            
+            const profile = {
+                name: nameVal,
+                pin: pinVal,
+                edu: eduVal,
+                userKey: userKey,
+                avatar: currentProfileAvatarData || avatarUrl
+            };
+
+            currentUserProfile = profile;
+            lsSet('boipoka_user_profile', profile);
+            myBooks = loadLocalUserBooks(userKey);
+
+            window.updateHeaderProfileBadge(profile);
+
+            if (currentUser) {
+                setupRealtimeCloudSync();
+                myBooks.forEach(b => syncBookToCloud(b));
+            }
+
+            document.getElementById('profileModal').classList.add('hidden');
+            window.renderApp();
+            window.showToast(`স্বাগতম ${profile.name}! আপনার ব্যক্তিগত সংগ্রহ লোড হয়েছে।`);
+        };
+
+        window.updateHeaderProfileBadge = function(profile) {
+            if (!profile) return;
+            const nameEl = document.getElementById('headerProfileName');
+            const metaEl = document.getElementById('headerProfileMeta');
+            if (nameEl) nameEl.innerText = profile.name;
+            if (metaEl) metaEl.innerText = `${profile.edu} • পিন: ******`;
+
+            const avatarContainer = document.getElementById('headerProfileAvatar');
+            if (avatarContainer) {
+                if (profile.avatar) {
+                    avatarContainer.innerHTML = `<img src="${window.escapeHtml(profile.avatar)}" class="w-full h-full object-cover">`;
+                } else {
+                    avatarContainer.innerHTML = `<i class="fa-solid fa-user text-royalCrimson"></i>`;
+                }
+            }
+        };
+
+        window.openProfileModal = function(isMandatory = false) {
+            if (currentUserProfile) {
+                document.getElementById('inputProfileName').value = currentUserProfile.name || '';
+                document.getElementById('inputProfilePin').value = currentUserProfile.pin || '';
+                document.getElementById('inputProfileEdu').value = currentUserProfile.edu || '';
+                document.getElementById('inputProfileAvatarUrl').value = currentUserProfile.avatar && !currentUserProfile.avatar.startsWith('data:') ? currentUserProfile.avatar : '';
+                currentProfileAvatarData = currentUserProfile.avatar || '';
+                window.updateProfileAvatarPreview(currentUserProfile.avatar || '');
+            }
+            document.getElementById('profileModal').classList.remove('hidden');
+        };
+
+        window.updateProfileAvatarPreview = function(url) {
+            const preview = document.getElementById('profileAvatarPreview');
+            const placeholder = document.getElementById('profileAvatarPlaceholder');
+            if (url) {
+                preview.src = url;
+                preview.classList.remove('hidden');
+                placeholder.classList.add('hidden');
+            } else {
+                preview.classList.add('hidden');
+                placeholder.classList.remove('hidden');
+            }
+        };
+
+        window.handleProfileAvatarUpload = function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = async function(evt) {
+                    currentProfileAvatarData = await compressImage(evt.target.result, 240, 240, 0.8);
+                    window.updateProfileAvatarPreview(currentProfileAvatarData);
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+
+        const quotes = [
+            { text: '"বই কিনে কেউ কোনো দিন দেউলিয়া হয় না।"' , author: '— সৈয়দ মুজতবা আলী' },
+            { text: '"ভালো বই পড়া মানে গত শতাব্দীর সেরা মানুষের সাথে কথা বলা।"' , author: '— রেনে দেকার্তে' },
+            { text: '"সংসারে সবচেয়ে দরকারি জিনিসটি হচ্ছে বই।"' , author: '— ঈশ্বরচন্দ্র বিদ্যাসাগর' },
+            { text: '"বই হচ্ছে এমন এক মাধ্যম যার সাহায্যে আমরা সময়ের সীমানা পার হতে পারি।"' , author: '— কার্ল সেগান' },
+            { text: '"একটি বই হলো এমন এক স্বপ্ন যা আপনি আপনার হাতে ধরে রাখতে পারেন।"' , author: '— নীল গেইম্যান' },
+            { text: '"বই পড়ার অভ্যাস তৈরি করা মানে জীবনের যাবতীয় দুঃখ থেকে নিজেকে বাঁচানোর একটি আশ্রয় তৈরি করা।"' , author: '— ডব্লিউ সমারসেট মম্' },
+            { text: '"সুশিক্ষিত লোক মাত্রই স্বশিক্ষিত।"' , author: '— প্রমথ চৌধুরী' }
+        ];
+
+        window.rotateQuote = function() {
+            const quoteBox = document.getElementById('quoteBox');
+            if (!quoteBox) return;
+            quoteBox.style.opacity = '0';
+            setTimeout(() => {
+                quoteIndex = (quoteIndex + 1) % quotes.length;
+                document.getElementById('quoteText').innerText = quotes[quoteIndex].text;
+                document.getElementById('quoteAuthor').innerText = quotes[quoteIndex].author;
+                quoteBox.style.opacity = '1';
+            }, 500);
+        };
+
+        window.startQuoteAutoRotate = function() {
+            if (quoteInterval) clearInterval(quoteInterval);
+            quoteInterval = setInterval(window.rotateQuote, 7000);
+        };
+
+        window.setFilter = function(filter) {
+            currentFilter = filter;
+            ['all', 'reading', 'unread', 'completed', 'wishlist'].forEach(f => {
+                const btn = document.getElementById(`filter-${f}`);
+                if (btn) {
+                    if (f === filter) {
+                        btn.className = "px-3 py-1.5 text-xs font-bold rounded-xl transition bg-royalCrimson text-amber-50";
+                    } else {
+                        btn.className = "px-3 py-1.5 text-xs font-semibold rounded-xl text-stone-700 hover:bg-agedPaper transition";
+                    }
+                }
+            });
+            window.renderApp();
+        };
+
+        window.renderApp = function() {
+            const grid = document.getElementById('booksGrid');
+            const searchVal = (document.getElementById('searchInput')?.value || '').toLowerCase();
+
+            let filtered = myBooks.filter(b => {
+                if (!b || b.deleted) return false;
+                const omnibusSearch = b.isOmnibus && Array.isArray(b.omnibusTitles) && b.omnibusTitles.some(t => t.title && t.title.toLowerCase().includes(searchVal));
+                const matchesFilter = (currentFilter === 'all') || (b.status === currentFilter);
+                const matchesSearch = (b.title && b.title.toLowerCase().includes(searchVal)) || (b.author && b.author.toLowerCase().includes(searchVal)) || omnibusSearch;
+                return matchesFilter && matchesSearch;
+            });
+
+            // Update Stats Dashboard (Excluding Wishlist items from Total count and Total Cost)
+            const activeBooks = myBooks.filter(b => b && !b.deleted);
+            const nonWishlistBooks = activeBooks.filter(b => b.status !== 'wishlist');
+            
+            const total = nonWishlistBooks.length;
+            const completed = activeBooks.filter(b => b.status === 'completed').length;
+            const reading = activeBooks.filter(b => b.status === 'reading').length;
+            const unread = activeBooks.filter(b => b.status === 'unread').length;
+            const wishlist = activeBooks.filter(b => b.status === 'wishlist').length;
+            const totalCost = nonWishlistBooks.reduce((sum, b) => sum + (Number(b.price) || 0), 0);
+
+            if (document.getElementById('statTotal')) document.getElementById('statTotal').innerText = total;
+            if (document.getElementById('statCompleted')) document.getElementById('statCompleted').innerText = completed;
+            if (document.getElementById('statReading')) document.getElementById('statReading').innerText = reading;
+            if (document.getElementById('statUnread')) document.getElementById('statUnread').innerText = unread;
+            if (document.getElementById('statWishlist')) document.getElementById('statWishlist').innerText = wishlist;
+            if (document.getElementById('statCost')) document.getElementById('statCost').innerText = `৳${totalCost.toLocaleString('bn-BD')}`;
+
+            // v3 hero
+            const pct = total > 0 ? Math.round((completed / total) * 100) : 0;
+            const setT = (id, v) => { const el = document.getElementById(id); if (el) el.innerText = v; };
+            setT('heroGreeting', 'স্বাগতম, ' + ((currentUserProfile && currentUserProfile.name) || 'পাঠক'));
+            setT('heroSub', total > 0 ? `আপনার সংগ্রহে ${total.toLocaleString('bn-BD')}টি বই আছে।` : 'প্রথম বইটি যুক্ত করে শুরু করুন।');
+            setT('heroPct', pct.toLocaleString('bn-BD') + '%');
+            setT('heroDone', `${completed.toLocaleString('bn-BD')} / ${total.toLocaleString('bn-BD')}`);
+            setT('heroReading', reading.toLocaleString('bn-BD'));
+            const ring = document.getElementById('heroRing');
+            if (ring) ring.style.strokeDashoffset = 213.6 * (1 - pct / 100);
+
+            // Calculate Daily & Monthly Reading Time Stats
+            if (currentUserProfile && currentUserProfile.userKey) {
+                const logs = loadLocalReadingLogs(currentUserProfile.userKey);
+                const todayStr = new Date().toISOString().split('T')[0];
+                const currentMonthPrefix = todayStr.substring(0, 7);
+
+                const todayMinutes = logs
+                    .filter(l => l.date === todayStr)
+                    .reduce((sum, l) => sum + (Number(l.minutes) || 0), 0);
+
+                const monthMinutes = logs
+                    .filter(l => l.date && l.date.startsWith(currentMonthPrefix))
+                    .reduce((sum, l) => sum + (Number(l.minutes) || 0), 0);
+
+                const monthHours = (monthMinutes / 60).toFixed(1);
+
+                if (document.getElementById('statTodayTime')) {
+                    document.getElementById('statTodayTime').innerText = `${todayMinutes} মিনিট`;
+                }
+                if (document.getElementById('statMonthTime')) {
+                    document.getElementById('statMonthTime').innerText = `${monthHours} ঘণ্টা`;
+                }
+            }
+
+            if (!grid) return;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-12 bg-white/60 border border-warmBorder rounded-2xl p-6">
+                        <svg class="w-16 h-16 mx-auto mb-3 opacity-80" viewBox="0 0 64 64" role="img" aria-label="পুস্তক লোগো" xmlns="http://www.w3.org/2000/svg"><circle cx="32" cy="32" r="30" fill="#FFF8F0" stroke="#E07A5F" stroke-width="2.5"/><path d="M13 41C20 37 27 38 32 42V25C27 21 20 20 13 23Z" fill="#1B4D3E"/><path d="M51 41C44 37 37 38 32 42V25C37 21 44 20 51 23Z" fill="#2A6F5B"/><path d="M32 42V25" stroke="#FFF8F0" stroke-width="1.5"/><path d="M18 48Q32 46 46 48" fill="none" stroke="#E07A5F" stroke-width="2.5" stroke-linecap="round"/><path d="M32 23C25 15 27 8 34 6C39 12 38 18 32 23Z" fill="#E07A5F"/><path d="M33 20C33 15 34 11 34 9" fill="none" stroke="#FFF8F0" stroke-width="1.2" stroke-linecap="round"/></svg>
+                        <p class="text-stone-600 font-semibold text-sm">কোনো বই পাওয়া যায়নি!</p>
+                        <p class="text-stone-400 text-xs mt-1">নতুন বই যুক্ত করতে ওপরের 'নতুন বই যুক্ত করুন' বাটনে ক্লিক করুন।</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(b => {
+                const badge = {
+                    reading: '<span class="v3-badge bg-amber-100/95 text-amber-900"><i class="fa-solid fa-book-open-reader"></i> পড়ছি</span>',
+                    completed: '<span class="v3-badge bg-emerald-100/95 text-emerald-900"><i class="fa-solid fa-check"></i> পড়া শেষ</span>',
+                    unread: '<span class="v3-badge bg-stone-100/95 text-stone-700"><i class="fa-regular fa-clock"></i> পড়া হয়নি</span>',
+                    wishlist: '<span class="v3-badge bg-indigo-100/95 text-indigo-900"><i class="fa-solid fa-heart"></i> উইশলিস্ট</span>'
+                }[b.status] || '';
+                const stars = b.rating > 0 ? '★'.repeat(b.rating) + '☆'.repeat(5 - b.rating) : '';
+                const days = b.status === 'completed' ? window.calculateDays(b.startDate, b.endDate) : 0;
+                const startTxt = (b.status === 'reading' && b.startDate) ? new Date(b.startDate).toLocaleDateString('bn-BD', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
+                const omni = b.isOmnibus && Array.isArray(b.omnibusTitles) && b.omnibusTitles.length > 0;
+                const E = window.escapeHtml;
+                return `
+                <div class="v3-card">
+                    <div class="v3-cover">
+                        ${b.cover ? `<img src="${E(b.cover)}" alt="${E(b.title)}" loading="lazy">` : `<i class="fa-solid fa-book text-4xl text-royalCrimson/30"></i>`}
+                    </div>
+                    <div class="px-1 space-y-1 min-w-0">
+                        <div>${badge}</div>
+                        <h4 class="font-serif font-bold text-[15px] text-royalCrimson clamp2 leading-snug" title="${E(b.title)}">${E(b.title)}</h4>
+                        <p class="text-xs text-stone-600 truncate">${E(b.author)}</p>
+                        ${stars ? `<p class="text-amber-500 text-xs font-bold">${stars}</p>` : ''}
+                        ${b.genre ? `<span class="inline-block text-[11px] text-stone-600 bg-agedPaper px-2 py-0.5 rounded-md"><i class="fa-solid fa-tag text-[10px]"></i> ${E(b.genre)}</span>` : ''}
+                        ${omni ? `
+                            <div class="text-xs bg-agedPaper/70 rounded-lg p-2">
+                                <div class="flex items-center justify-between font-bold text-stone-700 cursor-pointer" onclick="window.toggleOmnibusExpand('${b.id}')">
+                                    <span><i class="fa-solid fa-layer-group text-royalCrimson"></i> সংকলন (${b.omnibusTitles.length}টি)</span>
+                                    <i class="fa-solid fa-chevron-down transition-transform duration-200" id="omnibusIcon-${b.id}"></i>
+                                </div>
+                                <div id="omnibusList-${b.id}" class="hidden pt-1.5 mt-1.5 space-y-1 border-t border-warmBorder">
+                                    ${b.omnibusTitles.map(t => `<div class="flex justify-between gap-2 text-[11px] text-stone-600"><span class="truncate">• ${E(t.title)}</span><span class="shrink-0 ${t.status === 'completed' ? 'text-emerald-700 font-bold' : (t.status === 'reading' ? 'text-amber-700' : 'text-stone-400')}">${t.status === 'completed' ? 'শেষ' : (t.status === 'reading' ? 'চলছে' : 'বাকি')}</span></div>`).join('')}
+                                </div>
+                            </div>` : ''}
+                        ${b.status !== 'wishlist' ? `<p class="text-[11px] text-stone-500">${b.price ? '৳' + b.price + ' · ' : ''}${b.medium === 'online' ? 'অনলাইন' : 'দোকান'}${days ? ' · ' + days + ' দিন' : ''}</p>` : ''}
+                        ${startTxt ? `<p class="text-[11px] text-amber-800"><i class="fa-regular fa-calendar"></i> শুরু: ${startTxt}</p>` : ''}
+                        ${b.review ? `<p class="text-xs italic text-stone-600 clamp2">“${E(b.review)}”</p>` : ''}
+                    </div>
+                    <div class="flex items-center justify-between gap-2 mt-auto pt-2 border-t border-warmBorder/60">
+                        ${b.status === 'wishlist'
+                            ? `<button onclick="window.openQuickBuyModal('${b.id}')" class="text-xs bg-emerald-700 hover:bg-emerald-800 text-white font-semibold px-3 py-2 rounded-xl flex items-center gap-1"><i class="fa-solid fa-cart-shopping"></i> কিনুন</button>`
+                            : `<button onclick="window.openTimerModal('${b.id}')" class="text-xs bg-agedPaper hover:bg-amber-100 text-royalCrimson font-semibold px-3 py-2 rounded-xl flex items-center gap-1"><i class="fa-solid fa-clock"></i> সময়</button>`}
+                        <div class="flex gap-1.5">
+                            <button onclick="window.openEditModal('${b.id}')" class="v3-icon-btn" title="এডিট" aria-label="এডিট"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button onclick="window.deleteBook('${b.id}')" class="v3-icon-btn del" title="মুছুন" aria-label="মুছুন"><i class="fa-solid fa-trash-can"></i></button>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+        };
+
+        // Reset all recorded reading logs for current user profile
+        window.resetReadingLogs = async function() {
+            if (!currentUserProfile || !currentUserProfile.userKey) return;
+            const confirmReset = await window.appConfirm("আপনি কি আজকের ও এই মাসের সমস্ত সংরক্ষিত পড়ার সময় রিসেট করতে চান?");
+            if (confirmReset) {
+                saveLocalReadingLogs(currentUserProfile.userKey, []);
+                window.renderApp();
+                window.showToast("পড়ার সময় সফলভাবে রিসেট করা হয়েছে।");
+            }
+        };
+
+        // Timer Modal Controls
+        window.openTimerModal = function(bookId = null) {
+            const selectEl = document.getElementById('logBookId');
+            if (!selectEl) return;
+
+            const readingBooks = myBooks.filter(b => !b.deleted && b.status !== 'wishlist');
+            if (readingBooks.length === 0) {
+                window.showToast("সময় যোগ করতে আপনার সংগ্রহে অন্তত একটি বই যোগ করুন!", true);
+                return;
+            }
+
+            selectEl.innerHTML = readingBooks.map(b => `<option value="${b.id}">${window.escapeHtml(b.title)} (${b.author})</option>`).join('');
+            if (bookId) {
+                selectEl.value = bookId;
+            }
+
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('logDate').value = today;
+            document.getElementById('logMinutes').value = '';
+
+            document.getElementById('timerModal').classList.remove('hidden');
+        };
+
+        window.closeTimerModal = function() {
+            document.getElementById('timerModal').classList.add('hidden');
+            if (isTimerRunning) {
+                window.toggleTimer();
+            }
+        };
+
+        window.toggleTimer = function() {
+            const startBtn = document.getElementById('timerStartBtn');
+            if (!isTimerRunning) {
+                isTimerRunning = true;
+                if (startBtn) {
+                    startBtn.innerHTML = `<i class="fa-solid fa-pause"></i> বিরতি`;
+                    startBtn.className = "px-4 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-xs font-bold transition flex items-center gap-1";
+                }
+                timerInterval = setInterval(() => {
+                    timerSeconds++;
+                    window.updateTimerDisplay();
+                }, 1000);
+            } else {
+                isTimerRunning = false;
+                clearInterval(timerInterval);
+                if (startBtn) {
+                    startBtn.innerHTML = `<i class="fa-solid fa-play"></i> চালিয়ে যান`;
+                    startBtn.className = "px-4 py-1.5 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg text-xs font-bold transition flex items-center gap-1";
+                }
+                // Auto-fill logged minutes into input field
+                const mins = Math.max(1, Math.round(timerSeconds / 60));
+                document.getElementById('logMinutes').value = mins;
+            }
+        };
+
+        window.resetTimer = function() {
+            if (isTimerRunning) {
+                window.toggleTimer();
+            }
+            timerSeconds = 0;
+            window.updateTimerDisplay();
+        };
+
+        window.updateTimerDisplay = function() {
+            const hrs = String(Math.floor(timerSeconds / 3600)).padStart(2, '0');
+            const mins = String(Math.floor((timerSeconds % 3600) / 60)).padStart(2, '0');
+            const secs = String(timerSeconds % 60).padStart(2, '0');
+            const display = document.getElementById('stopwatchDisplay');
+            if (display) display.innerText = `${hrs}:${mins}:${secs}`;
+        };
+
+        window.saveReadingTimeLog = function(e) {
+            e.preventDefault();
+            if (!currentUserProfile || !currentUserProfile.userKey) return;
+
+            const bookId = document.getElementById('logBookId').value;
+            const minutes = Number(document.getElementById('logMinutes').value);
+            const date = document.getElementById('logDate').value;
+
+            if (!minutes || minutes <= 0) {
+                alert("অনুগ্রহ করে কত মিনিট পড়েছে তা উল্লেখ করুন!");
+                return;
+            }
+
+            const logs = loadLocalReadingLogs(currentUserProfile.userKey);
+            logs.push({
+                id: 'log_' + Date.now(),
+                bookId: bookId,
+                minutes: minutes,
+                date: date,
+                createdAt: new Date().toISOString()
+            });
+
+            saveLocalReadingLogs(currentUserProfile.userKey, logs);
+            window.resetTimer();
+            window.closeTimerModal();
+            window.renderApp();
+            window.showToast(`${minutes} মিনিট পড়ার সময় সফলভাবে রেকর্ড করা হয়েছে!`);
+        };
+
+        window.openQuickBuyModal = function(bookId) {
+            const book = myBooks.find(b => b.id === bookId);
+            if (!book) return;
+
+            document.getElementById('quickBuyBookId').value = book.id;
+            document.getElementById('quickBuyBookTitle').innerText = book.title || '';
+            document.getElementById('quickBuyBookAuthor').innerText = book.author || '';
+            document.getElementById('quickBuyPrice').value = book.price || '';
+            document.getElementById('quickBuyMedium').value = book.medium || 'offline';
+            document.getElementById('quickBuyCondition').value = book.condition || 'new';
+            document.getElementById('quickBuyStatus').value = 'unread';
+
+            document.getElementById('quickBuyModal').classList.remove('hidden');
+        };
+
+        window.closeQuickBuyModal = function() {
+            const modal = document.getElementById('quickBuyModal');
+            if (modal) modal.classList.add('hidden');
+        };
+
+        window.saveQuickBuy = function(e) {
+            e.preventDefault();
+            const bookId = document.getElementById('quickBuyBookId').value;
+            const price = Number(document.getElementById('quickBuyPrice').value) || 0;
+            const medium = document.getElementById('quickBuyMedium').value;
+            const condition = document.getElementById('quickBuyCondition').value;
+            const status = document.getElementById('quickBuyStatus').value;
+
+            const idx = myBooks.findIndex(b => b.id === bookId);
+            if (idx !== -1) {
+                myBooks[idx].price = price;
+                myBooks[idx].medium = medium;
+                myBooks[idx].condition = condition;
+                myBooks[idx].status = status;
+                normalizeDates(myBooks[idx]);
+                myBooks[idx].updatedAt = new Date().toISOString();
+
+                saveLocalUserBooks(currentUserProfile.userKey, myBooks);
+                syncBookToCloud(myBooks[idx]);
+
+                window.closeQuickBuyModal();
+                window.renderApp();
+                window.showToast("বইটি কেনা সম্পন্ন হয়েছে এবং আপনার মোট লাইব্রেরি সংগ্রহে যোগ করা হয়েছে!");
+            }
+        };
+
+        window.toggleOmnibusExpand = function(bookId) {
+            const listEl = document.getElementById(`omnibusList-${bookId}`);
+            const iconEl = document.getElementById(`omnibusIcon-${bookId}`);
+            if (listEl) {
+                listEl.classList.toggle('hidden');
+                if (iconEl) {
+                    iconEl.classList.toggle('rotate-180');
+                }
+            }
+        };
+
+        window.openAddModal = function() {
+            const titleEl = document.getElementById('bookModalTitle');
+            if (titleEl) titleEl.innerText = 'নতুন বই যোগ করুন';
+            
+            const form = document.getElementById('bookForm');
+            if (form) form.reset();
+            setTimeout(() => window.updateDateFields(), 0);
+            
+            const idInput = document.getElementById('inputBookId');
+            if (idInput) idInput.value = '';
+            
+            document.getElementById('inputRating').value = '0';
+            
+            currentCoverData = '';
+            omnibusItems = [];
+            window.clearCoverImage();
+            window.renderOmnibusRows();
+            window.toggleOmnibusListInput();
+            
+            const modal = document.getElementById('bookModal');
+            if (modal) modal.classList.remove('hidden');
+        };
+
+        window.openEditModal = function(bookId) {
+            const book = myBooks.find(b => b.id === bookId);
+            if (!book) return;
+
+            const titleEl = document.getElementById('bookModalTitle');
+            if (titleEl) titleEl.innerText = 'বইয়ের তথ্য পরিবর্তন করুন';
+
+            document.getElementById('inputBookId').value = book.id;
+            document.getElementById('inputTitle').value = book.title || '';
+            document.getElementById('inputAuthor').value = book.author || '';
+            document.getElementById('inputCoverUrl').value = book.cover && !book.cover.startsWith('data:') ? book.cover : '';
+            document.getElementById('inputStatus').value = book.status || 'reading';
+            document.getElementById('inputGenre').value = book.genre || '';
+            document.getElementById('inputRating').value = book.rating !== undefined ? book.rating : '0';
+            document.getElementById('inputPrice').value = book.price || '';
+            document.getElementById('inputCondition').value = book.condition || 'new';
+            document.getElementById('inputMedium').value = book.medium || 'online';
+            document.getElementById('inputStartDate').value = book.startDate || '';
+            document.getElementById('inputEndDate').value = book.endDate || '';
+            window.updateDateFields();
+            document.getElementById('inputReview').value = book.review || '';
+            
+            const isOmnibus = !!book.isOmnibus;
+            document.getElementById('inputIsOmnibus').checked = isOmnibus;
+            
+            currentCoverData = book.cover || '';
+            if (book.cover) {
+                document.getElementById('coverPreview').src = book.cover;
+                document.getElementById('coverPreviewContainer').classList.remove('hidden');
+                const _h = document.getElementById('autoCoverHint'); if (_h) _h.classList.toggle('hidden', !isAutoCover(book.cover));
+            } else {
+                window.clearCoverImage();
+            }
+
+            omnibusItems = Array.isArray(book.omnibusTitles) ? [...book.omnibusTitles] : [];
+            window.renderOmnibusRows();
+            window.toggleOmnibusListInput();
+
+            document.getElementById('bookModal').classList.remove('hidden');
+        };
+
+        window.closeBookModal = function() {
+            const modal = document.getElementById('bookModal');
+            if (modal) modal.classList.add('hidden');
+        };
+
+        window.handleImageUpload = function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = async function(evt) {
+                    currentCoverData = await compressImage(evt.target.result, 480, 640, 0.8);
+                    const _h = document.getElementById('autoCoverHint'); if (_h) _h.classList.add('hidden');
+                    const preview = document.getElementById('coverPreview');
+                    const container = document.getElementById('coverPreviewContainer');
+                    if (preview) preview.src = currentCoverData;
+                    if (container) container.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        };
+
+        window.clearCoverImage = function() {
+            currentCoverData = '';
+            const _h = document.getElementById('autoCoverHint'); if (_h) _h.classList.add('hidden');
+            const urlInput = document.getElementById('inputCoverUrl');
+            const fileInput = document.getElementById('inputCoverFile');
+            const container = document.getElementById('coverPreviewContainer');
+            if (urlInput) urlInput.value = '';
+            if (fileInput) fileInput.value = '';
+            if (container) container.classList.add('hidden');
+        };
+
+        window.toggleOmnibusListInput = function() {
+            const isChecked = document.getElementById('inputIsOmnibus').checked;
+            const container = document.getElementById('omnibusTitlesContainer');
+            if (!container) return;
+            if (isChecked) {
+                container.classList.remove('hidden');
+                if (omnibusItems.length === 0) {
+                    window.addOmnibusRow('', 'unread');
+                }
+            } else {
+                container.classList.add('hidden');
+            }
+        };
+
+        window.addOmnibusRow = function(title = '', status = 'unread') {
+            omnibusItems.push({ title, status });
+            window.renderOmnibusRows();
+        };
+
+        window.removeOmnibusRow = function(index) {
+            omnibusItems.splice(index, 1);
+            window.renderOmnibusRows();
+        };
+
+        window.renderOmnibusRows = function() {
+            const listContainer = document.getElementById('omnibusItemsList');
+            if (!listContainer) return;
+
+            listContainer.innerHTML = omnibusItems.map((item, idx) => `
+                <div class="flex items-center gap-2">
+                    <input type="text" value="${window.escapeHtml(item.title)}" oninput="window.updateOmnibusItem(${idx}, 'title', this.value)" placeholder="বইয়ের নাম..." class="flex-1 p-2 rounded-lg border border-warmBorder bg-white text-xs focus:outline-none">
+                    <select onchange="window.updateOmnibusItem(${idx}, 'status', this.value)" class="p-2 rounded-lg border border-warmBorder bg-white text-xs focus:outline-none">
+                        <option value="unread" ${item.status === 'unread' ? 'selected' : ''}>⏳ পড়া হয়নি</option>
+                        <option value="reading" ${item.status === 'reading' ? 'selected' : ''}>📖 পড়ছি</option>
+                        <option value="completed" ${item.status === 'completed' ? 'selected' : ''}>✅ পড়া শেষ</option>
+                    </select>
+                    <button type="button" onclick="window.removeOmnibusRow(${idx})" class="text-stone-400 hover:text-red-600 p-1 text-xs">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+            `).join('');
+        };
+
+        window.updateOmnibusItem = function(index, key, value) {
+            if (omnibusItems[index]) {
+                omnibusItems[index][key] = value;
+            }
+        };
+
+        // ---- Auto cover generator (draws a designed cover from title + author) ----
+        const COVER_PALETTES = [
+            ['#1B4D3E', '#F2B8A2'], ['#264653', '#E9C46A'], ['#3D405B', '#F4A261'],
+            ['#4A3F6B', '#F5CBA7'], ['#2A6F6B', '#FFD6A5'], ['#7B3F4E', '#F6D8AE'],
+            ['#1F2F4D', '#9EE0C9'], ['#5B4636', '#F0C987']
+        ];
+        const AUTO_COVER_TAG = 'boipoka-auto-cover';
+
+        function hashStr(str) {
+            let h = 0;
+            for (let i = 0; i < str.length; i++) h = (h * 31 + str.charCodeAt(i)) | 0;
+            return Math.abs(h);
+        }
+
+        function wrapLines(ctx, text, maxWidth, maxLines) {
+            const words = text.split(/\s+/).filter(Boolean);
+            const lines = [];
+            let line = '';
+            for (const w of words) {
+                const test = line ? line + ' ' + w : w;
+                if (ctx.measureText(test).width > maxWidth && line) { lines.push(line); line = w; }
+                else line = test;
+            }
+            if (line) lines.push(line);
+            if (lines.length > maxLines) {
+                const cut = lines.slice(0, maxLines);
+                cut[maxLines - 1] += '…';
+                return cut;
+            }
+            return lines;
+        }
+
+        window.generateCover = function(title, author) {
+            const W = 300, H = 420;
+            const c = document.createElement('canvas');
+            c.width = W; c.height = H;
+            const ctx = c.getContext('2d');
+            const [bg, gold] = COVER_PALETTES[hashStr(title + author) % COVER_PALETTES.length];
+
+            ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+            const g = ctx.createLinearGradient(0, 0, W, H);
+            g.addColorStop(0, 'rgba(255,255,255,0.10)'); g.addColorStop(1, 'rgba(0,0,0,0.25)');
+            ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+            ctx.fillStyle = 'rgba(0,0,0,0.25)'; ctx.fillRect(0, 0, 14, H);
+
+            ctx.strokeStyle = gold; ctx.lineWidth = 2; ctx.strokeRect(28, 20, W - 48, H - 40);
+            ctx.lineWidth = 1; ctx.strokeRect(34, 26, W - 60, H - 52);
+
+            ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.fillStyle = gold;
+            ctx.font = '22px "Anek Bangla", sans-serif';
+            ctx.fillText('❖', W / 2 + 7, 62);
+
+            let size = 34, lines;
+            const maxW = W - 100;
+            while (true) {
+                ctx.font = `700 ${size}px "Tiro Bangla", "Anek Bangla", serif`;
+                lines = wrapLines(ctx, title || 'নামহীন বই', maxW, 5);
+                if (lines.length <= 4 && lines.every(l => ctx.measureText(l).width <= maxW)) break;
+                if (size <= 18) break;
+                size -= 2;
+            }
+            ctx.fillStyle = '#FFFFFF';
+            const lh = size * 1.35;
+            const startY = H / 2 - ((lines.length - 1) * lh) / 2 - 10;
+            lines.forEach((l, i) => ctx.fillText(l, W / 2 + 7, startY + i * lh));
+
+            ctx.strokeStyle = gold; ctx.lineWidth = 1.5;
+            ctx.beginPath(); ctx.moveTo(W / 2 - 30, H - 118); ctx.lineTo(W / 2 + 44, H - 118); ctx.stroke();
+
+            ctx.fillStyle = gold;
+            ctx.font = '600 17px "Anek Bangla", sans-serif';
+            const aLines = wrapLines(ctx, author || '', maxW, 2);
+            aLines.forEach((l, i) => ctx.fillText(l, W / 2 + 7, H - 88 + i * 24));
+
+            // Tag so we know this cover is auto-made and can regenerate it on edits
+            return c.toDataURL('image/png') + '#' + AUTO_COVER_TAG;
+        };
+
+        function isAutoCover(v) { return typeof v === 'string' && v.endsWith('#' + AUTO_COVER_TAG); }
+
+        window.refreshAutoCover = function() {
+            const title = document.getElementById('inputTitle').value.trim();
+            const author = document.getElementById('inputAuthor').value.trim();
+            const urlVal = document.getElementById('inputCoverUrl').value.trim();
+            // Only auto-fill when the user hasn't supplied their own image
+            if (urlVal || (currentCoverData && !isAutoCover(currentCoverData))) return;
+            const preview = document.getElementById('coverPreview');
+            const container = document.getElementById('coverPreviewContainer');
+            const hint = document.getElementById('autoCoverHint');
+            if (!title) {
+                currentCoverData = '';
+                if (container) container.classList.add('hidden');
+                if (hint) hint.classList.add('hidden');
+                return;
+            }
+            currentCoverData = window.generateCover(title, author);
+            if (preview) preview.src = currentCoverData;
+            if (container) container.classList.remove('hidden');
+            if (hint) hint.classList.remove('hidden');
+        };
+
+        window.appConfirm = function(msg) {
+            return new Promise(resolve => {
+                const m = document.getElementById('confirmModal');
+                document.getElementById('confirmMsg').innerText = msg;
+                m.classList.remove('hidden');
+                const done = v => { m.classList.add('hidden'); resolve(v); };
+                document.getElementById('confirmYes').onclick = () => done(true);
+                document.getElementById('confirmNo').onclick = () => done(false);
+            });
+        };
+
+        window.exportLibrary = async function() {
+            if (!currentUserProfile || !currentUserProfile.userKey) { window.openProfileModal(true); return; }
+            const payload = JSON.stringify({ app: 'pustok', version: 1, exportedAt: new Date().toISOString(),
+                books: myBooks, logs: loadLocalReadingLogs(currentUserProfile.userKey) }, null, 2);
+            const filename = 'pustok-backup-' + new Date().toISOString().slice(0, 10) + '.json';
+            try {
+                const blob = new Blob([payload], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url; a.download = filename; a.style.display = 'none';
+                document.body.appendChild(a); a.click(); a.remove();
+                setTimeout(() => URL.revokeObjectURL(url), 4000);
+                window.showToast('ব্যাকআপ ফাইল ডাউনলোড হয়েছে।');
+            } catch (e) {
+                window.showToast('ব্যাকআপ ডাউনলোড করা যায়নি।', true);
+            }
+        };
+
+        window.importLibrary = function(ev) {
+            const file = ev.target.files[0];
+            if (!file) return;
+            if (!currentUserProfile || !currentUserProfile.userKey) { window.openProfileModal(true); ev.target.value = ''; return; }
+            const reader = new FileReader();
+            reader.onload = () => {
+                try {
+                    const data = JSON.parse(reader.result);
+                    if (!data || !Array.isArray(data.books)) throw new Error('bad');
+                    const ids = new Set(myBooks.map(b => b.id));
+                    let added = 0;
+                    data.books.forEach(b => { if (b && b.id && b.title && !ids.has(b.id)) { myBooks.push(b); added++; } });
+                    saveLocalUserBooks(currentUserProfile.userKey, myBooks);
+                    if (Array.isArray(data.logs) && data.logs.length) {
+                        const cur = loadLocalReadingLogs(currentUserProfile.userKey);
+                        if (cur.length === 0) saveLocalReadingLogs(currentUserProfile.userKey, data.logs);
+                    }
+                    window.renderApp();
+                    window.showToast(`${added}টি বই ইমপোর্ট হয়েছে।`);
+                } catch (e) { window.showToast('ফাইলটি পড়া যায়নি।', true); }
+                ev.target.value = '';
+            };
+            reader.readAsText(file);
+        };
+
+        window.saveBook = function(e) {
+            e.preventDefault();
+            if (!currentUserProfile || !currentUserProfile.userKey) {
+                window.openProfileModal(true);
+                return;
+            }
+
+            const bookId = document.getElementById('inputBookId').value;
+            const title = document.getElementById('inputTitle').value.trim();
+            const author = document.getElementById('inputAuthor').value.trim();
+            const coverUrl = document.getElementById('inputCoverUrl').value.trim();
+
+            const isOmnibus = document.getElementById('inputIsOmnibus').checked;
+            const validOmnibusItems = isOmnibus ? omnibusItems.filter(i => i.title.trim() !== '') : [];
+
+            const stNow = document.getElementById('inputStatus').value;
+            const startVal = (stNow === 'reading' || stNow === 'completed') ? document.getElementById('inputStartDate').value : '';
+            const endVal = stNow === 'completed' ? document.getElementById('inputEndDate').value : '';
+            if (startVal && endVal && endVal < startVal) {
+                window.showToast('শেষ করার তারিখ শুরুর তারিখের আগে হতে পারে না।', true);
+                return;
+            }
+            let coverFinal = currentCoverData || coverUrl;
+            if (!coverFinal) { try { coverFinal = window.generateCover(title, author); } catch (err) { coverFinal = ''; } }
+
+            const bookData = {
+                id: bookId || 'book_' + Date.now(),
+                title: title,
+                author: author,
+                cover: coverFinal,
+                status: document.getElementById('inputStatus').value,
+                genre: document.getElementById('inputGenre').value.trim(),
+                rating: Number(document.getElementById('inputRating').value),
+                price: Number(document.getElementById('inputPrice').value) || 0,
+                condition: document.getElementById('inputCondition').value,
+                medium: document.getElementById('inputMedium').value,
+                startDate: startVal,
+                endDate: endVal,
+                isOmnibus: isOmnibus,
+                omnibusTitles: validOmnibusItems,
+                review: document.getElementById('inputReview').value.trim(),
+                userName: currentUserProfile.name,
+                userEdu: currentUserProfile.edu,
+                userAvatar: currentUserProfile.avatar,
+                updatedAt: new Date().toISOString()
+            };
+
+            const nextBooks = myBooks.slice();
+            if (bookId) {
+                const idx = nextBooks.findIndex(b => b.id === bookId);
+                if (idx !== -1) nextBooks[idx] = bookData; else nextBooks.unshift(bookData);
+            } else {
+                nextBooks.unshift(bookData);
+            }
+
+            if (!saveLocalUserBooks(currentUserProfile.userKey, nextBooks)) {
+                window.showToast('সংরক্ষণ করা যায়নি — ফোনের স্টোরেজ ভরে গেছে। ছোট ছবি ব্যবহার করুন বা পুরনো বই মুছুন।', true);
+                return;
+            }
+            myBooks = nextBooks;
+
+            window.closeBookModal();
+            window.renderApp();
+            window.showToast(bookId ? "বইয়ের তথ্য সফলভাবে এডিট করা হয়েছে!" : "নতুন বই যুক্ত করা হয়েছে!");
+        };
+
+        window.deleteBook = async function(bookId) {
+            if (!bookId) return;
+            const targetBook = myBooks.find(b => b.id === bookId);
+            const bookTitle = targetBook ? `"${targetBook.title}"` : 'এই বইটি';
+            
+            if (await window.appConfirm(`${bookTitle} কি আপনার লাইব্রেরি থেকে মুছে ফেলতে চান?`)) {
+                myBooks = myBooks.filter(b => b.id !== bookId);
+                if (currentUserProfile && currentUserProfile.userKey) {
+                    saveLocalUserBooks(currentUserProfile.userKey, myBooks);
+                }
+                removeBookFromCloud(bookId);
+                window.renderApp();
+                window.showToast("বইটি লাইব্রেরি থেকে মুছে ফেলা হয়েছে।");
+            }
+        };
+
+        window.addEventListener('load', () => {
+            try {
+                document.fonts.load('700 30px "Tiro Bangla"');
+                document.fonts.load('600 17px "Anek Bangla"');
+            } catch (e) {}
+            ['inputTitle', 'inputAuthor', 'inputCoverUrl'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.addEventListener('input', window.refreshAutoCover);
+            });
+            initApp();
+        });
+    </script>
+<script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('./sw.js').catch(function (e) { console.warn('SW registration failed', e); });
+            });
+        }
+    </script>
+</body>
+</html>

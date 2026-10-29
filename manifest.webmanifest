@@ -1,0 +1,27 @@
+{
+  "id": "./",
+  "name": "পুস্তক — ব্যক্তিগত লাইব্রেরি",
+  "short_name": "পুস্তক",
+  "description": "আপনার ব্যক্তিগত অফলাইন বইয়ের লাইব্রেরি — বই যোগ করুন, পড়ার হিসাব রাখুন, ব্যাকআপ নিন।",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "lang": "bn",
+  "dir": "ltr",
+  "background_color": "#F3F7F4",
+  "theme_color": "#1B4D3E",
+  "categories": ["books", "education", "lifestyle"],
+  "prefer_related_applications": false,
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/maskable-192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable" },
+    { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "screenshots": [
+    { "src": "screenshots/narrow-1.png", "sizes": "540x960", "type": "image/png", "form_factor": "narrow", "label": "লাইব্রেরি হোম" },
+    { "src": "screenshots/narrow-2.png", "sizes": "540x960", "type": "image/png", "form_factor": "narrow", "label": "বইয়ের তালিকা" },
+    { "src": "screenshots/wide-1.png", "sizes": "1280x720", "type": "image/png", "form_factor": "wide", "label": "ডেস্কটপ ভিউ" }
+  ]
+}
